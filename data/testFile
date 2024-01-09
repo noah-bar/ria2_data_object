@@ -1,0 +1,12 @@
+# Prise de note 15.11.23
+
+Objectif BI -> Obtenir un dashboard -> ou nimporte qui peut interpreter les infos
+
+
+                                                                        -------
+Dashboard -----> Logic BI ----> DataWarchouse <---- E L T <---------   | File  |
+                                    ^               / | \              | DB    |
+                                    |       Extract   |   Transform    | Image |
+Permet d'interpreter les données<-- IA               Load               -------
+
+Si il y a un problème sur le dashboard, le problème peut venir de plusieurs source différente (file, db, image ...)
