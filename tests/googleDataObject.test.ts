@@ -61,3 +61,34 @@ describe("Test doesExist method", () => {
         expect(exists).toBeFalsy()
     })
 })
+
+describe("Test remove method", () => {
+    it("Should remove object on the bucket", async () => {
+
+        //given
+        await uploadTestFile()
+        let exists = await dataObject.doesExist("testFile")
+        expect(exists).toBeTruthy()
+
+        //when
+        await dataObject.remove("testFile")
+
+        //then
+        exists = await dataObject.doesExist("testFile")
+        expect(exists).toBeFalsy()
+    })
+
+    it("Should remove object and folder on the bucket", async () => {
+        //given
+        await uploadTestFile("testFolder/testFileInSubfolder")
+        expect(await dataObject.doesExist("testFolder")).toBeTruthy()
+        expect(await dataObject.doesExist("testFolder/testFileInSubfolder")).toBeTruthy()
+
+        //when
+        await dataObject.remove("testFolder", true)
+
+        //then
+        expect(await dataObject.doesExist("testFolder")).toBeFalsy()
+        expect(await dataObject.doesExist("testFolder/testFileInSubfolder")).toBeFalsy()
+    })
+})
