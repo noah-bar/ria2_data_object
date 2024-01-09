@@ -1,6 +1,15 @@
 import IDataObject, {Url} from "./IDataObject";
+import {ApiError, Bucket, Storage} from "@google-cloud/storage"
 
 export default class GoogleDataObject implements IDataObject {
+    private storage: Storage
+    private bucket: Bucket
+
+    constructor(keyFilename: string, private bucketName: string) {
+        this.storage = new Storage({keyFilename})
+        this.bucket = this.storage.bucket(this.bucketName)
+    }
+
     doesExist(): Promise<boolean> {
         throw new Error("To implement")
     }
