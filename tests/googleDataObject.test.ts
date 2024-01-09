@@ -22,3 +22,19 @@ afterEach(async () => {
         await dataObject.remove("testFile")
     }
 })
+
+
+describe("Test upload method", () => {
+    it("Should upload local file if bucket exist", async () => {
+
+        //given
+        expect(await dataObject.doesExist()).toBeTruthy()
+        expect(await dataObject.doesExist('testFile')).toBeFalsy()
+
+        //when
+        await uploadTestFile()
+
+        //then
+        expect(await dataObject.doesExist('testFile')).toBeTruthy()
+    })
+})
