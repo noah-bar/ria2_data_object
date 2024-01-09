@@ -1,6 +1,10 @@
 import IDataObject, {Url} from "./IDataObject";
 import {ApiError, Bucket, Storage} from "@google-cloud/storage"
-import {DataObjectException, ObjectNotFoundException} from "./exceptions/dataObjectExceptions";
+import {
+    DataObjectException,
+    ObjectAlreadyExistsException,
+    ObjectNotFoundException
+} from "./exceptions/dataObjectExceptions";
 
 export default class GoogleDataObject implements IDataObject {
     private storage: Storage
@@ -57,8 +61,10 @@ export default class GoogleDataObject implements IDataObject {
         await this.bucket.file(remoteFullPath).delete()
     }
 
-    upload(file: Buffer, remoteFullPath: Url): void {
-        throw new Error("To implement")
+    async upload(buffer: Buffer, remoteFullPath: Url): Promise<void> {
+        const exists = await this.doesExist(remoteFullPath)
+        if(exists) throw new ObjectAlreadyExistsException(remoteFullPath)
+        await this.bucket.file(remoteFullPath).save(buffer)
     }
 
 }
