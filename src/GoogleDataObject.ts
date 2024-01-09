@@ -10,8 +10,13 @@ export default class GoogleDataObject implements IDataObject {
         this.bucket = this.storage.bucket(this.bucketName)
     }
 
-    doesExist(): Promise<boolean> {
-        throw new Error("To implement")
+    async doesExist(remoteFullPath?: string): Promise<boolean> {
+        if(remoteFullPath) {
+            const [files] = await this.bucket.getFiles({prefix: remoteFullPath})
+            return files.length > 0
+        }
+        const [exists] = (await this.bucket.exists())
+        return exists
     }
 
     download(remoteFullPath: Url, localFullPath: Url): Promise<void> {
