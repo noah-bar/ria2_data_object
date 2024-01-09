@@ -33,8 +33,17 @@ export default class GoogleDataObject implements IDataObject {
         }
     }
 
-    publish(remoteFullPath: Url, expirationTime?: number): Promise<Url> {
-        throw new Error("To implement")
+    async publish(remoteFullPath: Url, expirationTime: number = 90): Promise<Url> {
+        const exists = await this.doesExist(remoteFullPath)
+        if(!exists) throw new ObjectNotFoundException(remoteFullPath)
+        const expires = new Date()
+        expires.setHours(expirationTime)
+        const [v1] = await this.bucket.file(remoteFullPath).getSignedUrl({
+            version: 'v4',
+            action: 'read',
+            expires
+        })
+        return v1
     }
 
     remove(remoteFullPath: Url, recursive?: boolean): void {
