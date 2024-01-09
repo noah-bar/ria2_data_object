@@ -1,5 +1,6 @@
 import IDataObject, {Url} from "./IDataObject";
 import {ApiError, Bucket, Storage} from "@google-cloud/storage"
+import {DataObjectException, ObjectNotFoundException} from "./exceptions/dataObjectExceptions";
 
 export default class GoogleDataObject implements IDataObject {
     private storage: Storage
@@ -19,8 +20,17 @@ export default class GoogleDataObject implements IDataObject {
         return exists
     }
 
-    download(remoteFullPath: Url, localFullPath: Url): Promise<void> {
-        throw new Error("To implement")
+    async download(remoteFullPath: Url , localFullPath: Url) {
+        try {
+            await this.bucket.file(remoteFullPath).download({
+                destination: localFullPath
+            })
+        } catch(e: unknown) {
+            if(e instanceof ApiError) {
+                if(e.code === 404) throw new ObjectNotFoundException(remoteFullPath)
+            }
+            throw new DataObjectException("Unknown error")
+        }
     }
 
     publish(remoteFullPath: Url, expirationTime?: number): Promise<Url> {
