@@ -38,3 +38,26 @@ describe("Test upload method", () => {
         expect(await dataObject.doesExist('testFile')).toBeTruthy()
     })
 })
+
+describe("Test doesExist method", () => {
+    it("Should return true if the bucket exist", async () => {
+        //then
+        const exists = await dataObject.doesExist()
+        expect(exists).toBeTruthy()
+    })
+
+    it("Should return true if the object exist", async () => {
+        //when
+        await uploadTestFile()
+
+        //then
+        const exists = await dataObject.doesExist("testFile")
+        expect(exists).toBeTruthy()
+    })
+
+    it("Should return false if the object doesn't exist", async () => {
+        //then
+        const exists = await dataObject.doesExist("testMissingFile")
+        expect(exists).toBeFalsy()
+    })
+})
