@@ -46,8 +46,15 @@ export default class GoogleDataObject implements IDataObject {
         return v1
     }
 
-    remove(remoteFullPath: Url, recursive?: boolean): void {
-        throw new Error("To implement")
+    async remove(remoteFullPath: Url, recursive?: boolean): Promise<void> {
+        if(recursive) {
+            const [files] = await this.bucket.getFiles({ prefix: remoteFullPath })
+            for(const file of files) {
+                await file.delete()
+            }
+            return
+        }
+        await this.bucket.file(remoteFullPath).delete()
     }
 
     upload(file: Buffer, remoteFullPath: Url): void {
