@@ -3,3 +3,4 @@ config/
 .idea/
 .DS_store
 .env
+dist/
