@@ -6,8 +6,8 @@ import {ObjectNotFoundException} from "../src/exceptions/dataObjectExceptions";
 dotenv.config()
 
 const bucketName = process.env.BUCKET_NAME as string
-const keyFilename = resolve("./config/es-bi-noah.json")
-const dataObject = new GoogleDataObject(keyFilename,bucketName)
+const googleCredentials = resolve(process.env.GOOGLE_CREDENTIALS_PATH as string)
+const dataObject = new GoogleDataObject(googleCredentials,bucketName)
 
 const uploadTestFile = async (filename: string = "testFile") => {
     if(!(await dataObject.doesExist(filename))) {

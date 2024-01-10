@@ -12,9 +12,9 @@ const app = express()
 const router = Router()
 const upload = multer()
 
-const keyFilename = resolve("./config/key.json")
+const googleCredentials = resolve(process.env.GOOGLE_CREDENTIALS_PATH as string)
 const bucketName = process.env.BUCKET_NAME as string
-const googleLabelDetector = new GoogleDataObject(keyFilename, bucketName)
+const googleLabelDetector = new GoogleDataObject(googleCredentials, bucketName)
 
 app.use(express.json())
 
