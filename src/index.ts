@@ -3,7 +3,7 @@ import GoogleDataObject from "./GoogleDataObject";
 import express, { Router, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import multer from 'multer'
-import { ObjectNotFoundException } from "./exceptions/dataObjectExceptions";
+import { ObjectAlreadyExistsException, ObjectNotFoundException } from "./exceptions/dataObjectExceptions";
 
 dotenv.config()
 
@@ -19,23 +19,31 @@ const googleLabelDetector = new GoogleDataObject(keyFilename, bucketName)
 app.use(express.json())
 
 router.post('/upload',upload.single('file'), async (req: Request, res: Response) => {
-  const errors = []
+  const errors: string[] = []
   const file = req.file
-  const name = req.body.name
+  const name: string = req.body.name
 
-  if(!file) errors.push("The request must contain an file")
+  if(!file) errors.push("The request must contain a file")
   if(!name) errors.push("The request must contain a name")
   if(errors.length > 0) return res.status(422).json({errors})
 
-  const exists = await googleLabelDetector.doesExist(name)
-  if(!exists) await googleLabelDetector.upload(file!.buffer, name)
-  return res.json({name})
+  try {
+    const exists = await googleLabelDetector.doesExist(name)
+    if(!exists) await googleLabelDetector.upload(file!.buffer, name)
+    return res.json({name})
+  } catch (err: unknown) {
+    if(err instanceof ObjectAlreadyExistsException) {
+      return res.status(422).json({ errors: [err.message]})
+    }
+    return res.status(500).json({ errors: ["Unknown error"] })
+  }
 })
 
 router.get('/publish/:name', async (req: Request, res: Response) => {
+  const name: string = req.params.name
+  const expirationTime: number = req.body.expirationTime || 90
+
   try {
-    const name = req.params.name
-    const expirationTime = req.body.expirationTime || 90
     const url = await googleLabelDetector.publish(name, expirationTime)
     return res.json({
       url: url
