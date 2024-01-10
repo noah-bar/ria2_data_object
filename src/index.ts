@@ -31,6 +31,20 @@ router.post('/upload',upload.single('file'), async (req: Request, res: Response)
   return res.json({name})
 })
 
+router.get('/publish/:name', async (req: Request, res: Response) => {
+  const name = req.params.name
+  const expirationTime = req.body.expirationTime || 90
+  if(!name) {
+    return res.status(401).send({
+      errors: ["The request must contain an name"]
+    })
+  }
+  const url = await googleLabelDetector.publish(name, expirationTime)
+  return res.json({
+    url: url
+  })
+})
+
 app.use("/api/v1", router)
 
 app.listen(PORT, () => {
