@@ -42,7 +42,7 @@ export default class GoogleDataObject implements IDataObject {
     }
 
     async publish(remoteFullPath: Url, expirationTime: number = 90): Promise<Url> {
-        const exists = await this.doesExist(remoteFullPath)
+        const exists = await this.doesExist(remoteFullPath, true)
         if(!exists) throw new ObjectNotFoundException(remoteFullPath)
         const expires = new Date()
         expires.setHours(expirationTime)
