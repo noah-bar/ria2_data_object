@@ -33,7 +33,7 @@ List all dependencies and their version needed by the project as :
    - `BUCKET_NAME`: The name of your Google Cloud Storage bucket.
    - `GOOGLE_CREDENTIALS_PATH`: The path to the JSON file containing your Google credentials.
    - `PORT`: The port on which the application will run (default is 3000).
- 3. Install dependencies with
+ 3. Install dependencies:
     ```
     npm i
     ```
