@@ -28,18 +28,34 @@ List all dependencies and their version needed by the project as :
 
 ## Deployment
 ### On dev environment
-1. Rename .env.example file to .env
-2. Complete the following variables:
-   - *BUCKET_NAME*: the name of your bucket
-   - *GOOGLE_CREDENTIALS_PATH*: The path to the JSON file containing your google credentials
-   - *PORT*: The port on which the application is launched (3000 by default)
- 3. Install dependencies with ```npm i```
- 4. If all is well configured you should be able to run the tests with the command ``npm run test`` and they should all pass.
- 5. To launch the application in development mode use ```npm run dev```
+1. Rename `.env.example` file to `.env`.
+2. Complete the following variables in the `.env` file:
+   - `BUCKET_NAME`: The name of your Google Cloud Storage bucket.
+   - `GOOGLE_CREDENTIALS_PATH`: The path to the JSON file containing your Google credentials.
+   - `PORT`: The port on which the application will run (default is 3000).
+ 3. Install dependencies with
+    ```
+    npm i
+    ```
+ 5. Run tests to ensure everything is configured correctly:
+    ```
+    npm run test
+    ```
+ 7. Launch the application in development mode:
+    ```
+    npm run dev
+    ```
 ### On integration environment
-1. Build the application with ```npm run build``` this should create a **dist** folder
-2. Add .env inside the dist folder with your prod configuration.
-3. To launch the application use ```node index.js```
+1. Build the application:
+   ```
+   npm run build
+   ```
+   This step creates a `dist` folder.
+3. Place a `.env` file with production configurations inside the `dist` folder.
+4. Launch the application:
+   ```
+   node dist/index.js
+   ```
 ## Directory structure
 ```console
 dataObject
