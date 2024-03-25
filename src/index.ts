@@ -16,7 +16,7 @@ const googleCredentials = resolve(process.env.GOOGLE_CREDENTIALS_PATH as string)
 const bucketName = process.env.BUCKET_NAME as string
 const googleLabelDetector = new GoogleDataObject(googleCredentials, bucketName)
 
-app.use(express.json())
+app.use(express.json({ limit: '50mb' }))
 
 router.post('/upload',upload.single('file'), async (req: Request, res: Response) => {
   const errors: string[] = []
