@@ -1,0 +1,13 @@
+FROM node:21-alpine
+WORKDIR /app
+COPY package.json ./
+RUN npm i
+COPY . .
+CMD ["npx", "ts-node", "./src/index.ts"]
+EXPOSE 3000
+
+# BUILD
+# docker build . -f Dockerfile.dev -t data_object:dev
+
+# RUN
+# docker run -d -p 3000:3000 --name data_object_dev data_object:dev
