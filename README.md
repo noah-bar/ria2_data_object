@@ -56,6 +56,26 @@ List all dependencies and their version needed by the project as :
    ```
    node dist/index.js
    ```
+## Docker
+To containerize and run the application using Docker, use the following commands:
+### On dev environment
+1. Build the Docker image with the dev configuration.
+   ```
+   docker build . -f Dockerfile.dev -t data_object:dev
+   ```
+2. Run the Docker container in detached mode, mapping the container's port 3000 to the host's port 3000.
+   ```
+   docker run -d -p 3000:3000 --name data_object_dev data_object:dev
+   ```
+### On integration environment
+1. Build the Docker image with the production configuration.
+   ```
+   docker build . -f Dockerfile -t data_object:prod
+   ```
+2. Run the Docker container in detached mode, mapping the container's port 3000 to the host's port 3000.
+   ```
+   docker run -d -p 3000:3000 --name data_object_prod data_object:prod
+   ```
 ## Directory structure
 ```console
 dataObject
